@@ -6,7 +6,29 @@
 - QQ: 2360889142    
 
 ***
-After I have learned the Andrew Ng's coursera about maching learning(ML), I deire to do a small completed ML project. So I begin to look for  projects in the Internet. The Titanic project is an entry-level project and it is suitable for me to have an understanding of the whole process of machine learning.
+After I have learned the Andrew Ng's coursera about maching learning(ML), I deire to do a small completed ML project. So I begin to look for  projects in the Internet. The Titanic project is an entry-level project and it is a binary classification problem, which is suitable for me to have an understanding of the whole process of machine learning.   
+At he begining, I searched the Internet for code written by other people and got a preliminary understanding of the whole process of machine learning. Then according to the workflow, begin to writ  myself code. This is just to implement the entire process of the project. The analysis of specific features, choices, additions or more advanced knowledge still needs to be futher implemented.  
+
+***  
+Workflow:  
+---  
+* Data cleaning   
+* Exploratory Visulization   
+* Feature Eenggineering   
+* Basic model and evalution  
+* Hyperparameters tuning   
+* Predict results   
+
+***
+Data cleaning  
+---  
+Firstly, we should import dataset and observe first 5 exampeles in dataset.    
+```python  
+traindata = pd.read_csv(traindata_file)
+testdata = pd.read_csv(testdata_file)
+print '\n traindata first 5 data: is \n', traindata.head()
+```
+
 工作流程：  
 1. Data cleaning  
 2. Exploratory Visulization  
