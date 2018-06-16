@@ -29,6 +29,34 @@ testdata = pd.read_csv(testdata_file)
 print '\n traindata first 5 data: is \n', traindata.head()
 ```  
 ![](/fig/fig1.png)  
+Next step, we need to know which datas are missing.  
+```python
+full = pd.concat([traindata, testdata], ignore_index=True)
+print '\n Find missing data: \n',full.isnull().sum()
+```  
+Where we find missing data of trianing dataset and test dataset together.  You will see:  
+![](/fig/fig2.png)  
+From above results, we can find that 'Embarked' and 'Fare' have little missing data, but 'Cabin' and 'Age' have many missing data.
+(not include 'Survived') So we need to fill these missing data.  
+**Fill Embarked**:    
+According to real meaning, Embarked represents Port of Embarkation, so we use mode of the feature to fill.  
+```python
+print '\nThe most number of Embarked is \n',full['Embarked'].mode()
+full.Embarked.fillna('S', inplace=True)
+```  
+**Fill fare**:  
+Since fare is possiblely related with 'Pclass' according to real conditions, so we can use the fare of the corresponding 'Pclass' of mean value to fill.  
+```python  
+print '\n Find the data of fare is nan :\n', full[full.Fare.isnull()]
+Pclass3_mean = full[full.Pclass==3]['Fare'].mean()
+full.Fare.fillna(Pclass3_mean, inplace=True)
+```  
+**Fill Cabin**:  
+
+
+
+
+
 工作流程：  
 1. Data cleaning  
 2. Exploratory Visulization  
