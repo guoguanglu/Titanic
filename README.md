@@ -28,7 +28,7 @@ traindata = pd.read_csv(traindata_file)
 testdata = pd.read_csv(testdata_file)
 print '\n traindata first 5 data: is \n', traindata.head()
 ```  
-[](/fig/fig1.png)  
+![](/fig/fig1.png)  
 工作流程：  
 1. Data cleaning  
 2. Exploratory Visulization  
