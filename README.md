@@ -1,5 +1,10 @@
 # Titanic  
+---  
+- Author: Guo Guanglu  
+- E-mail: 2360889142@qq.com
+- QQ: 2360889142    
 
+***
 After I have learned the Andrew Ng's coursera about maching learning(ML), I deire to do a small completed ML project. So I begin to look for  projects in the Internet. The Titanic project is an entry-level project and it is suitable for me to have an understanding of the whole process of machine learning.
 工作流程：  
 1. Data cleaning  
@@ -34,7 +39,7 @@ learn model
 ***  
 Reference  
 ----
-https://blog.csdn.net/wydyttxs/article/details/76695205 about person
+https://blog.csdn.net/wydyttxs/article/details/76695205 about person  
 https://blog.csdn.net/lll1528238733/article/details/75114360
-https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between features and Survived
+https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between features and Survived  
 https://www.kaggle.com/mrisdal/exploring-survival-on-the-titanic the same function with above link
