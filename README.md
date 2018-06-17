@@ -1,6 +1,6 @@
 # Titanic  
 ---  
-![](/fig/Titanic.png)  
+![](/fig/Titanic.jpg)  
 - Author: Guo Guanglu  
 - E-mail: 2360889142@qq.com  
 - QQ: 2360889142    
