@@ -336,12 +336,12 @@ This is my scored in leaderboard of kaggle:
 Summary  
 ---  
 A completed ML project includes:  
-1.Data cleaing   
-2.Visualization (not introducing)  
-3.Feature engineering  
-4.Basic model and evalution
-5.Hyperparameters tuning  
-6.Prediction
+1. Data cleaing   
+2. Visualization (not introducing)  
+3. Feature engineering  
+4. Basic model and evalution
+5. Hyperparameters tuning  
+6. Prediction
 
 And we can use learning-curve to observe fitting conditions.  
 Overall,through this project, I have a preliminary understanding of the construction of learning projects and I am aware that besides the model, it is also very important for data cleaning and feature engineering.In the future, I will learn about feature selection to improve the accuracy of the model.
