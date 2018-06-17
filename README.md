@@ -113,12 +113,48 @@ print '\n Information of Miss Age\n',full[full.Title=='Miss']['Age'].describe()
 print '\n Information of Mrs Age\n',full[full.Title=='Mrs']['Age'].describe()
 print '\n Information of Mr Age\n',full[full.Title=='Mr']['Age'].describe()
 ```  
-We find the mean value of 'Master' is about 4, little boy, but not girl title. Since girl hadn't married, so 'Miss' may be have many girls, and the mean value of 
-
-
-参考它人从姓名的称呼去填充，结合实际很相关  
-对于称呼的分类，根据名字进行分类，然后根据得到的称呼与性别比较，可以把前四个比较大的称呼作为value，而其他的值较小所以将同时又发现除dr以外其他的都有属于一类性别，因此将其他类别归为两类Rarewoman ，Rareman  ,又因为master相对与小男孩，因此小女孩。  
-先假设little girl都没结婚（一般情况下该假设都成立），所以little girl肯定都包含在Miss里面。little boy（Master）的年龄最大值为14岁，所以相应的可以设定年龄小于等于14岁的Miss为little girl。对于年龄缺失的Miss，可以用(Parch!=0)来判定是否为little girl，因为little girl往往是家长陪同上船，不会一个人去。  使用每title的中位数去表示相应称呼缺失的Age。去掉name和ticket number 得到我们的特征，然后输出数据清洗之后的数据  
+We find the mean value of 'Master' is about 4, little boy, but not girl title. Since girl hadn't married, so 'Miss' may be have many girls, and the mean value of 'Miss' is about 22, the std is about 12, so we can also divide 'Miss' into two parts :one 'Miss',another 'Girl'.  
+![](/fig/fig7.png)  
+Since the maximum of 'Master' is about 14, so we can divide the age of less than 14 into 'Girl'. For missing age in 'Miss', we can divide 'Parch'==0 into 'Girl'. Because girls commonly need  someone to accompany.  
+```python
+#function of finding 'Girl'
+def girl(aa):
+    if (aa.Age!=999)&(aa.Title=='Miss')&(aa.Age<=14):  
+        return 'Girl'  
+    elif (aa.Age==999)&(aa.Title=='Miss')&(aa.Parch!=0):  
+        return 'Girl'  
+    else:  
+        return aa.Title
+```
+```python
+#convert girl, for nan fill 99, because nan can't compute
+full.Age.fillna(999, inplace=True)
+full['Title'] = full.apply(girl, axis=1)
+print '\nfinish the convertion of title\n',full.Title.value_counts()
+```  
+After converting, we can get the title as follows:  
+![](/fig/fig8.png)  
+The we start to fill 'Age'. We using the median values of the corresponding 'Title' to fill.  
+```python
+#fill Age
+Tit=['Mr','Miss','Mrs','Master','Girl','Rareman','Rarewoman']
+for i in Tit:
+    full.loc[(full.Age==999)&(full.Title==i),'Age']=full.loc[full.Title==i,'Age'].median()
+print full.info()
+```
+Finally we can get information of the data:  
+![](/fig/fig9.png)  
+Since 'Name' and 'Ticket' are not meaningful for prediction, the features is removed from the data. Then full is divided into two parts:
+train and test data. Finally save cleaning data.  
+```python  
+full.drop(columns=['Name', 'Ticket'], inplace=True)
+train = full[:891]
+test = full[891:]
+print train.head()
+print test.head()
+train.to_csv('../data/fill_train.csv', index=False)
+test.to_csv('../data/fill_test.csv', index = False)
+```
 
 feature engineering
 首先先用直接能用的特征运行整个程序，得出一个初步的结果，然后在进行分析  
