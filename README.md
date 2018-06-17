@@ -346,7 +346,7 @@ First of all, through this project, I have a preliminary understanding of the co
 ***  
 Reference  
 ----
-https://blog.csdn.net/wydyttxs/article/details/76695205 about person  
-https://blog.csdn.net/lll1528238733/article/details/75114360  
+https://blog.csdn.net/wydyttxs/article/details/76695205 about Pearson  
+https://blog.csdn.net/lll1528238733/article/details/75114360  about a completed project
 https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between features and Survived  
 https://www.kaggle.com/mrisdal/exploring-survival-on-the-titanic the same function with above link
