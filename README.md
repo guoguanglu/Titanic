@@ -363,3 +363,6 @@ https://blog.csdn.net/wydyttxs/article/details/76695205 about Pearson
 https://blog.csdn.net/lll1528238733/article/details/75114360  about a completed project
 https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between features and Survived  
 https://www.kaggle.com/mrisdal/exploring-survival-on-the-titanic the same function with above link
+
+-----------------------------------------
+https://guoguanglu.github.io/
