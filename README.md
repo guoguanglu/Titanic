@@ -1,8 +1,8 @@
 # Titanic  
 ---  
-![](/fig/Titanic.png)
+![](/fig/Titanic.png)  
 - Author: Guo Guanglu  
-- E-mail: 2360889142@qq.com
+- E-mail: 2360889142@qq.com  
 - QQ: 2360889142    
 
 ***
@@ -12,9 +12,8 @@ At he begining, I searched the Internet for code written by other people and got
 ***  
 Workflow:  
 ---  
-* Data cleaning   
-* Exploratory Visulization   
-* Feature Eenggineering   
+* Data cleaning    
+* Feature engineering   
 * Basic model and evalution  
 * Hyperparameters tuning   
 * Predict results   
@@ -156,12 +155,188 @@ train.to_csv('../data/fill_train.csv', index=False)
 test.to_csv('../data/fill_test.csv', index = False)
 ```
 
-feature engineering
-首先先用直接能用的特征运行整个程序，得出一个初步的结果，然后在进行分析  
-这里我先用one-hot编码非数值数据然后进行模型调参
+***
+Feature engineering  
+---  
+Since passenerId is not meaningfu, so we firstly remove the feature from data.  
+```python
+#drop passengerId , the feature no meaning
+train = fill_train.drop(columns='PassengerId')
+test = fill_test.drop(columns='PassengerId')
+```  
+Then we need convert categorical variables to numerical variables, because there is no size relationship between different characters, use one-hot to encode.  
+```python
+#convert categorical variables to numerical variables
+train_dummies = pd.get_dummies(train)
+test_dummies = pd.get_dummies(test)
+test_predict = test_dummies.drop('Survived', axis=1)
+print train_dummies.head()
+```  
+Next step, get train data and label  
+```python
+#get train data and label
+y = train_dummies.Survived
+X = train_dummies.drop('Survived', axis=1)
+print 'show first 5 data X:\n', X.head()
+print 'show first 5 data y:\n', y.head()
+```  
+![](/fig/fig10.png)  
+And we can visulaize these data by PCA  
+```python  
+#PCA visualization
+array_y = np.array(y)
+pca = PCA(n_components=2)
+scaler_X= StandardScaler().fit(X).transform(X)
+newdata = pca.fit_transform(scaler_X)
+print "explained_variance_ratio:\n",pca.explained_variance_ratio_
+plt.plot(newdata[array_y==1,0], newdata[array_y==1,1],'+g', \
+         newdata[array_y == 0, 0], newdata[array_y == 0, 1], 'or')
+plt.show()
+```
+![](/fig/fig11.png)  
+Here I don’t preform complex feature engineering, first convertinng the existing features into learnable data, and then implementing the predictive function.  
 
-learn model  
-我打算使用svm模型去解决这个问题。  
+***  
+Basic model and evaluation  
+---  
+I use SVM model to prediction.  
+Firstly we need split train to train and test, because we need test to evaluate our model.  
+```python  
+#split to train and test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,\
+                                                    random_state=123,\
+                                                    stratify= y)
+```  
+we need  scale data , later we will compare the scaled and unscaled results, you will find that scaled data improve the accuracy of prediciton.
+```python  
+#scaler data
+scaler = StandardScaler().fit(X_train)
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+```
+Next step, set hyperparameters, since we will use GridSearchCV to find the best parameters.  
+```python  
+hyperparameters = {'C':[0.001,0.01,0.1,10,12,14],\
+                   'gamma':[0.001,0.003,0.005,0.06]}
+```
+Let's start to learn SVM model  
+```python  
+clf = GridSearchCV(svm.SVC(), hyperparameters, cv=10)
+clf.fit(X_train, y_train)
+```
+After learning model, we use our divided test data to evaluate our model.  
+```python  
+pred = clf.predict(X_train)
+print '\n The unscaled train accuracy is :', accuracy_score(y_train, pred)
+
+pred = clf.predict(X_test)
+print '\n The unscaled test accuracy is :', accuracy_score(y_test, pred)
+
+
+clf.fit(X_train_scaled, y_train)
+
+pred = clf.predict(X_train_scaled)
+print '\nThe scaled train accuracy is :', accuracy_score(y_train, pred)
+
+pred = clf.predict(X_test_scaled)
+print '\nThe scaled test accuracy is :', accuracy_score(y_test, pred)
+print '\nThe best first group parameters is\n',clf.best_params_
+```
+![](/fig/fig12.png)  
+From above results, we find scaled resulted is better than unscaled resulted.  
+Then we can use learning-curve to observe underfitting or overfitting.  
+```python  
+def plot_learning_curve(estimator, title, X, y, ylim=None, cv=None,
+                        n_jobs=1, train_sizes=np.linspace(.1, 1.0, 5)):
+    plt.figure()
+    plt.title(title)
+    if ylim is not None:
+        plt.ylim(*ylim)
+    plt.xlabel("Training examples")
+    plt.ylabel("Score")
+    train_sizes, train_scores, test_scores = learning_curve(
+        estimator, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    plt.grid()
+
+    plt.fill_between(train_sizes, train_scores_mean - train_scores_std,
+                     train_scores_mean + train_scores_std, alpha=0.1,
+                     color="r")
+    plt.fill_between(train_sizes, test_scores_mean - test_scores_std,
+                     test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    plt.plot(train_sizes, train_scores_mean, 'o-', color="r",
+             label="Training score")
+    plt.plot(train_sizes, test_scores_mean, 'o-', color="g",
+             label="Cross-validation score")
+
+    plt.legend(loc="best")
+    return plt
+#draw learning_curve
+estimator = svm.SVC(C=clf.best_params_['C'], gamma=clf.best_params_['gamma'])
+title = "Learning Curves (SVM)"
+cv = ShuffleSplit(n_splits=10, test_size=0.2, random_state=0)
+plot_learning_curve(estimator, title, X_train_scaled, y_train, cv=cv, n_jobs=1)
+```
+![](/fig/fig13.png)  
+From the above figure, we can find litte variance and a larger bias, so our model is underfitting, we need to add some features to improve accuracy.  
+Therefore, I use the product of every two items as a new feature.  
+```python  
+def addProduct_NewFeature(Dataframe):
+    temp_Dataframe = Dataframe
+    columns_size = Dataframe.iloc[0].size
+    temp_Dataframe.columns = range(columns_size)
+    product_feature = temp_Dataframe
+    for i in range(columns_size):
+        temp = temp_Dataframe[i]
+        list_temp = list(temp)
+        rept_temp = np.array([list_temp]*(columns_size-i)).T
+        temp = pd.DataFrame(rept_temp)
+        temp2 = temp_Dataframe[range(i,columns_size)]
+        temp2.columns = range(columns_size - i)
+        temp = temp2 * temp
+        product_feature = pd.concat([product_feature, temp], axis=1, ignore_index=True)
+    return product_feature
+```  
+Add new feature  
+```python  
+X = addProduct_NewFeature(X)
+test_predict = addProduct_NewFeature(test_predict)
+print X.head()
+```  
+![](/fig/fig14.png)
+The learning steps are the same.  
+
+***  
+Predict results  
+---  
+Finally, we can use our learned model to predict test dataset and save the results according to the requirements.  
+```python   
+test_predict_scaled = scaler.transform(test_predict)
+predict_result = clf.predict(test_predict_scaled)
+result = pd.DataFrame({'PassengerId':fill_test.PassengerId, 'Survived': predict_result})
+result['Survived'] = result['Survived'].astype('int')
+result.to_csv('G.csv', index= False)
+```  
+Note: the results of prediction  is float-type, we need convert it to int-type  
+```python   
+result['Survived'] = result['Survived'].astype('int')
+result.to_csv('G.csv', index= False)
+```   
+If you want to save your model, you can:  
+```python
+joblib.dump(clf, 'svm.pkl')
+```
+This is my scored in leaderboard of kaggle:  
+![](/fig/fig15.png)  
+
+***  
+Summary  
+---  
+First of all, through this project, I have a preliminary understanding of the construction of learning projects and I am aware that besides the model, it is also very important for data cleaning and feature engineering.In the future, I will learn about feature selection to improve the accuracy of the model.
+
 
 
 
@@ -172,6 +347,6 @@ learn model
 Reference  
 ----
 https://blog.csdn.net/wydyttxs/article/details/76695205 about person  
-https://blog.csdn.net/lll1528238733/article/details/75114360
+https://blog.csdn.net/lll1528238733/article/details/75114360  
 https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between features and Survived  
 https://www.kaggle.com/mrisdal/exploring-survival-on-the-titanic the same function with above link
