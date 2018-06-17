@@ -1,6 +1,6 @@
 # Titanic  
 ---  
-![](/fig/Titanic.png =500*500)  
+![](/fig/Titanic.png){:height='50%' width='50%'}  
 - Author: Guo Guanglu  
 - E-mail: 2360889142@qq.com  
 - QQ: 2360889142    
