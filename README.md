@@ -365,4 +365,4 @@ https://zhuanlan.zhihu.com/p/27655949 about visualization relationship between f
 https://www.kaggle.com/mrisdal/exploring-survival-on-the-titanic the same function with above link
 
 -----------------------------------------
-https://guoguanglu.github.io/
+[github.io]:https://guoguanglu.github.io "guoguanglu github.io"
