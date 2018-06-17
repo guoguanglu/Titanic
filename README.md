@@ -5,6 +5,10 @@
 - E-mail: 2360889142@qq.com  
 - QQ: 2360889142    
 
+***  
+[**Back to github.io**][github.io]  
+
+
 ***
 After I have learned the Andrew Ng's coursera about maching learning(ML), I deire to do a small completed ML project. So I begin to look for  projects in the Internet. The Titanic project is an entry-level project and it is a binary classification problem, which is suitable for me to have an understanding of the whole process of machine learning.   
 At he begining, I searched the Internet for code written by other people and got a preliminary understanding of the whole process of machine learning. Then according to the workflow, begin to writ  myself code. This is just to implement the entire process of the project. The analysis of specific features, choices, additions or more advanced knowledge still needs to be futher implemented.  
